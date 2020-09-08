@@ -27,7 +27,13 @@ namespace Reservation
         private Database mDatabase = new Database();
         private int mRow1, mRow2, mColumn;
         private bool mAvailable;
-        private List<DockPanel> mRows = new List<DockPanel>();
+
+        private struct Panell
+        {
+            public DockPanel panel;
+            public Brush color;
+        }
+        private List<Panell> mRows = new List<Panell>();
 
         public MainWindow()
         {
@@ -143,8 +149,11 @@ namespace Reservation
                     //Room is available.
                     mAvailable = true;
                     DockPanel panel = sender as DockPanel;
+                    Panell shift = new Panell();
+                    shift.panel = panel;
+                    shift.color = panel.Background;
+                    mRows.Add(shift);
                     panel.Background = Brushes.Yellow;
-                    mRows.Add(panel);
                 }
                 else
                 {
@@ -166,8 +175,11 @@ namespace Reservation
                 {
                     mRow2 = row;
                     DockPanel panel = sender as DockPanel;
+                    Panell shift = new Panell();
+                    shift.panel = panel;
+                    shift.color = panel.Background;
+                    mRows.Add(shift);
                     panel.Background = Brushes.Yellow;
-                    mRows.Add(panel);
                 }
                 else
                 {
@@ -196,10 +208,20 @@ namespace Reservation
                         //All the reserved hours must be red colored.
                         for (int i=0; i<mRows.Count; i++)
                         {
-                            mRows[i].Background = Brushes.Red;
+                            mRows[i].panel.Background = Brushes.Red;
                         }
                         mRows.Clear();
                     }
+                }
+                else
+                {
+
+                    //If user choosed hours which are already reserved, the whole coloring needs to be canceled
+                    for (int i = 0; i < mRows.Count; i++)
+                    {
+                        mRows[i].panel.Background = mRows[i].color;
+                    }
+                    mRows.Clear();
                 }
             }
         }
