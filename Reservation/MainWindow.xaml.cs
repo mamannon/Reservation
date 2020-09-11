@@ -24,7 +24,7 @@ namespace Reservation
     public partial class MainWindow : Window
     {
 
-        private Database mDatabase = new Database();
+        private Database mDatabase;
         private int mRow1, mRow2, mColumn;
         private bool mAvailable;
 
@@ -38,12 +38,12 @@ namespace Reservation
         public MainWindow()
         {
             InitializeComponent();
-            string[] rooms = new string[4];
             string[] seats = new string[4];
             string[] addresses = new string[4];
+            string[] rooms = new string[4];
 
-            //We need to read meeting room data from an XML file "meeting room data.xml"
-            string file = Process.GetCurrentProcess().MainModule.FileName;
+        //We need to read meeting room data from an XML file "meeting room data.xml"
+        string file = Process.GetCurrentProcess().MainModule.FileName;
 
             //Because file includes also the name of the executable, we need to cut it out
             string del = "Reservation.exe";
@@ -107,6 +107,9 @@ namespace Reservation
             Grid.SetColumn(txt, 3);
             grid.Children.Add(txt);
 
+            //Fill the names, sizes and addresses of rooms to database
+            mDatabase = new Database(ref rooms, ref seats, ref addresses);
+
             //Let's fill a green color to all the other cells
             for (int ii=1; ii<25; ii++)
             {
@@ -143,7 +146,7 @@ namespace Reservation
                 //We need to check if the room is available at the selected time
                 mRow1= mRow2 = Grid.GetRow((UIElement)sender);
                 mColumn = Grid.GetColumn((UIElement)sender);
-                if (mDatabase.IsFree(ref mRow1, ref mColumn))
+                if (mDatabase.IsFree(ref mRow1, mColumn))
                 {
 
                     //Room is available.
@@ -171,7 +174,7 @@ namespace Reservation
             {
                 
                 //We need to check if the room is available at the selected time
-                if (mDatabase.IsFree(ref row, ref mColumn))
+                if (mDatabase.IsFree(ref row, mColumn))
                 {
                     mRow2 = row;
                     DockPanel panel = sender as DockPanel;
@@ -203,7 +206,7 @@ namespace Reservation
 
                         //If user gives his/her name, the application makes reservation
                         string name = input.Answer;
-                        mDatabase.Reserve(name, ref mRow1, ref mRow2, ref mColumn);
+                        mDatabase.Reserve(name, ref mRow1, ref mRow2, mColumn);
 
                         //All the reserved hours must be red colored.
                         for (int i=0; i<mRows.Count; i++)
