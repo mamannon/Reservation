@@ -4,7 +4,7 @@ This small project is oversimplified room reservation Windows desktop program. I
 
 # Requirements
 
-To run this program, you need MySQL database engine installed on your computer. Then you need to dreate database 'meeting_rooms' by using the database definition file 'meeting room task.sql' located in 'Solution Items' folder.
+To run this program, you need MySQL database engine installed on your computer. Then you need to create a database 'meeting_rooms' by using the database definition file 'meeting room task.sql' located in 'Solution Items' folder.
 
 # License
 
